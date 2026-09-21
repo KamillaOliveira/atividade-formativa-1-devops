@@ -29,3 +29,17 @@ jobs:
         run: |
           echo "Realizando implantacao continua..."
           echo "Deploy realizado com sucesso!"
+
+  notificar_discord:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Enviar Notificacao para o Discord
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "Status da Pipeline DevOps - Paladino"
+          description: "Resultado do workflow no repositorio atividade-formativa-1-devops."
+          color: 0x00ff00
+          username: "Paladino CI/CD Bot"
